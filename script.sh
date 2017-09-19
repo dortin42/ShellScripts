@@ -1,9 +1,9 @@
 #$SHELL
 # -*- ENCODING: UTF-8 -*-
 clear
-echo "Linux -> Ubuntu"
+echo "\e[1;31m~>Linux -> Ubuntu >= 16.04 LTS"
 echo "\033[7;32mDespués del upgrade vendrá nano para editar el tema de zsh, y se reiniciará el sistema\n\n"
-#
+sudo apt install software-properties-common
 sudo dpkg --add-architecture i386 
 wget -nc https://dl.winehq.org/wine-builds/Release.key
 sudo apt-key add Release.key
@@ -73,7 +73,11 @@ echo "\e[7;32m~>Pick, cartera de contraseñas instalada\n\n"
 cd
 sudo gem install bundler
 sudo gem install rails
+sudo gem install jquery-rails
+sudo gem install sass
+sudo gem install materialize-sass
 sudo gem install nokogiri
+sudo gem install material_icons
 clear
 echo "\e[7;31m~>Rails instalado\n\n"
 echo "\e[7;32m~>Configurando Git"
