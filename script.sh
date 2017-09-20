@@ -1,12 +1,68 @@
-#$SHELL
+#!/bin/bash
 # -*- ENCODING: UTF-8 -*-
-#sudo pacman -S -y lsb_release
 clear
 OS=$(cat /etc/os-release | grep ID_LIKE) #(lsb_release -si)
-instalarProgramasUbuntu(){
+instalarProgramasArch() {
+	yaourt -S pamac-aur dolphin seahorse konsole breeze breeze-cursor-theme breeze-icon-theme sqlitebrowser sqlite3 libsqlite3-dev sublime-text default-jdk default-jre postgresql postgresql-contrib libpq-dev dukto sublime-text php-cli ruby nodejs php-mysql rar unrar npm git mysql-client mysql-server php7.0 libapache2-mod-php libapache2-mod-php7.0 php phpmyadmin php-mcrypt apache2 haguichi tilda virtualbox pavucontrol gdebi vlc qbittorrent zsh git-core git curl zlib1g-dev build-essential libssl-dev libreadline-dev libyaml-dev libsqlite3-dev sqlite3 libxml2-dev libxslt1-dev libcurl4-openssl-dev python-software-properties libffi-dev python-pip python3 
+	sudo phpenmod mcrypt
+	sudo npm install -g heroku-cli bower
+	sudo chown nintf1link:www-data /var/www/html
+	sudo service apache2 restart
+	clear
+	echo "\e[7;32m~>Paquetes necesarios para el día a día instalados\n\n~>Apache reiniciado\n\n"
+	wget https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh -O - | zsh
+	chsh -s `which zsh`
+	clear
+	echo "\e[7;32m~>Zsh es ahora la shell por defecto.\n~>Temas disponibles: bira, bureau, rkj-repos, y bullet-train." $SHELL "\n~>Configurando Postgresql\n\n"
+	#postgresql
+	sudo -u postgres createuser -s nintf1link
+	clear
+	echo "\e[7;32m~>Postgresql configurado\n\n"
+	cd
+	sudo gem install bundler
+	sudo gem install rails
+	sudo gem install jquery-rails
+	sudo gem install sass
+	sudo gem install materialize-sass
+	sudo gem install nokogiri
+	sudo gem install material_icons
+	clear
+	echo "\e[7;31m~>Rails instalado\n\n"
+	echo "\e[7;32m~>Configurando Git"
+	git config --global color.ui true
+	git config --global user.name "nintF1link"
+	git config --global user.email "jalagut8@gmail.com"
+	ssh-keygen -t rsa -b 4096 -C "jalagut8@gmail.com"
+	cat ~/.ssh/id_rsa.pub
+	ssh -T git@github.com
+	clear
+	echo "\e[7;32m~>Git configurado \n~>Abriendo Heroku\n\n"
+	heroku login
+	clear
+	echo "\e[7;32m~>Has iniciado sesión en Heroku\n\n"
+	cd .oh-my-zsh/themes && wget http://raw.github.com/caiogondim/bullet-train-oh-my-zsh-theme/master/bullet-train.zsh-theme
+	clear
+	echo "\e[7;32m~>Después del upgrade vendrá nano para editar el tema de zsh, y se reiniciará el sistema"
+	cd && yaourt -Syyu --aur
+	clear
+	echo "\e[7;32m~>Abriendo el archivo .zshrc, recuerde poner el tema bira, bureau, rkj-repos, o bullet-train"
+	nano .zshrc
+}
+instalarYaourt() {
+	clear
+	echo '
+	[archlinuxfr]
+	SigLevel = Never
+	Server = http://repo.archlinux.fr/$arch
+	' >> /etc/pacman.conf
+	echo "\e[7;34m\n~>Aur configurado.\nInstalando yaourt"
+	pacman -Sy yaourt
+	instalarProgramasArch
+}
+if [[ "$OS" == "ID_LIKE=ubuntu" ]]; then
 	clear
 	echo "\e[1;31m~>Linux -> Ubuntu >= 16.04 LTS"
-	echo "\033[7;32mDespués del upgrade vendrá nano para editar el tema de zsh, y se reiniciará el sistema\n\n"
+	echo "\033[7;32mDespués del upgrade vendrá nano para editar el tema de zsh, y se reiniciará el \nsistema\n\n"
 	sudo apt install software-properties-common
 	sudo dpkg --add-architecture i386 
 	wget -nc https://dl.winehq.org/wine-builds/Release.key
@@ -97,67 +153,6 @@ instalarProgramasUbuntu(){
 	clear
 	echo "\e[7;32m~>Abriendo el archivo .zshrc, recuerde poner el tema bira, bureau, rkj-repos, o bullet-train"
 	nano .zshrc
-}
-instalarProgramasArch() {
-	yaourt -S pamac-aur dolphin seahorse konsole breeze breeze-cursor-theme breeze-icon-theme sqlitebrowser sqlite3 libsqlite3-dev sublime-text default-jdk default-jre postgresql postgresql-contrib libpq-dev dukto sublime-text php-cli ruby nodejs php-mysql rar unrar npm git mysql-client mysql-server php7.0 libapache2-mod-php libapache2-mod-php7.0 php phpmyadmin php-mcrypt apache2 haguichi tilda virtualbox pavucontrol gdebi vlc qbittorrent zsh git-core git curl zlib1g-dev build-essential libssl-dev libreadline-dev libyaml-dev libsqlite3-dev sqlite3 libxml2-dev libxslt1-dev libcurl4-openssl-dev python-software-properties libffi-dev python-pip python3 
-	sudo phpenmod mcrypt
-	sudo npm install -g heroku-cli bower
-	sudo chown nintf1link:www-data /var/www/html
-	sudo service apache2 restart
-	clear
-	echo "\e[7;32m~>Paquetes necesarios para el día a día instalados\n\n~>Apache reiniciado\n\n"
-	wget https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh -O - | zsh
-	chsh -s `which zsh`
-	clear
-	echo "\e[7;32m~>Zsh es ahora la shell por defecto.\n~>Temas disponibles: bira, bureau, rkj-repos, y bullet-train." $SHELL "\n~>Configurando Postgresql\n\n"
-	#postgresql
-	sudo -u postgres createuser -s nintf1link
-	clear
-	echo "\e[7;32m~>Postgresql configurado\n\n"
-	cd
-	sudo gem install bundler
-	sudo gem install rails
-	sudo gem install jquery-rails
-	sudo gem install sass
-	sudo gem install materialize-sass
-	sudo gem install nokogiri
-	sudo gem install material_icons
-	clear
-	echo "\e[7;31m~>Rails instalado\n\n"
-	echo "\e[7;32m~>Configurando Git"
-	git config --global color.ui true
-	git config --global user.name "nintF1link"
-	git config --global user.email "jalagut8@gmail.com"
-	ssh-keygen -t rsa -b 4096 -C "jalagut8@gmail.com"
-	cat ~/.ssh/id_rsa.pub
-	ssh -T git@github.com
-	clear
-	echo "\e[7;32m~>Git configurado \n~>Abriendo Heroku\n\n"
-	heroku login
-	clear
-	echo "\e[7;32m~>Has iniciado sesión en Heroku\n\n"
-	cd .oh-my-zsh/themes && wget http://raw.github.com/caiogondim/bullet-train-oh-my-zsh-theme/master/bullet-train.zsh-theme
-	clear
-	echo "\e[7;32m~>Después del upgrade vendrá nano para editar el tema de zsh, y se reiniciará el sistema"
-	cd && yaourt -Syyu --aur
-	clear
-	echo "\e[7;32m~>Abriendo el archivo .zshrc, recuerde poner el tema bira, bureau, rkj-repos, o bullet-train"
-	nano .zshrc
-	
-}
-instalarYaourt() {
-	clear
-	echo '
-	[archlinuxfr]
-	SigLevel = Never
-	Server = http://repo.archlinux.fr/$arch
-	' >> /etc/pacman.conf
-	echo "\e[7;34m\n~>Aur configurado.\nInstalando yaourt"
-	pacman -Sy yaourt
-	instalarProgramasArch
-}
-if [[ "$OS" == "ID_LIKE=ubuntu" ]]; then
-	instalarProgramasUbuntu
 elif [[ $OS == "ID_LIKE=arch" ]]; then
 	read -n 1 -p "\e[7;34m\n~>¿Tiene instalado y configurado yaourt? \nSi no dispone de yaourt se instalará y configurará de forma automática \n [\e[0;32ms\e[0;34m \ \e[0;31mn\e[7;34m]" tecla
 	case $tecla in
