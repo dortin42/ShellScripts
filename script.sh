@@ -1,9 +1,10 @@
 #!/bin/bash
 # -*- ENCODING: UTF-8 -*-
 clear
+cd
+Programas=$"seahorse synaptic filezilla clementine speedcrunch terminator sqlitebrowser sqlite3 libsqlite3-dev  default-jdk default-jre postgresql postgresql-contrib libpq-dev steam sublime-text php-cli ruby build-essential patch ruby-dev zlib1g-dev liblzma-dev libsqlite3-dev nodejs php-mysql rar unrar playonlinux git mysql-client mysql-server php7.0 libapache2-mod-php libapache2-mod-php7.0 php phpmyadmin php-mcrypt apache2 haguichi tilda virtualbox  gdebi vlc qbittorrent zsh git-core git curl zlib1g-dev build-essential libssl-dev libreadline-dev libyaml-dev libsqlite3-dev sqlite3 libxml2-dev libxslt1-dev libcurl4-openssl-dev python-software-properties libffi-dev python-pip python3" # sublime-text dolphin konsole pavucontrol breeze breeze-cursor-theme breeze-icon-theme dukto
 OS=$(cat /etc/os-release | grep ID_LIKE) #(lsb_release -si)
-instalarProgramasArch() {
-	yaourt -S pamac-aur dolphin seahorse konsole breeze breeze-cursor-theme breeze-icon-theme sqlitebrowser sqlite3 libsqlite3-dev sublime-text default-jdk default-jre postgresql postgresql-contrib libpq-dev dukto sublime-text php-cli ruby nodejs php-mysql rar unrar npm git mysql-client mysql-server php7.0 libapache2-mod-php libapache2-mod-php7.0 php phpmyadmin php-mcrypt apache2 haguichi tilda virtualbox pavucontrol gdebi vlc qbittorrent zsh git-core git curl zlib1g-dev build-essential libssl-dev libreadline-dev libyaml-dev libsqlite3-dev sqlite3 libxml2-dev libxslt1-dev libcurl4-openssl-dev python-software-properties libffi-dev python-pip python3 
+configurarProgramas() {
 	sudo phpenmod mcrypt
 	sudo npm install -g heroku-cli bower
 	sudo chown nintf1link:www-data /var/www/html
@@ -11,7 +12,7 @@ instalarProgramasArch() {
 	clear
 	echo "\e[7;32m~>Paquetes necesarios para el día a día instalados\n\n~>Apache reiniciado\n\n"
 	wget https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh -O - | zsh
-	chsh -s `which zsh`
+	sudo chsh -s /usr/bin/zsh
 	clear
 	echo "\e[7;32m~>Zsh es ahora la shell por defecto.\n~>Temas disponibles: bira, bureau, rkj-repos, y bullet-train." $SHELL "\n~>Configurando Postgresql\n\n"
 	#postgresql
@@ -19,13 +20,7 @@ instalarProgramasArch() {
 	clear
 	echo "\e[7;32m~>Postgresql configurado\n\n"
 	cd
-	sudo gem install bundler
-	sudo gem install rails
-	sudo gem install jquery-rails
-	sudo gem install sass
-	sudo gem install materialize-sass
-	sudo gem install nokogiri
-	sudo gem install material_icons
+	sudo gem install bundler rails jquery-rails sass materialize-sass nokogiri material_icons
 	clear
 	echo "\e[7;31m~>Rails instalado\n\n"
 	echo "\e[7;32m~>Configurando Git"
@@ -40,13 +35,23 @@ instalarProgramasArch() {
 	heroku login
 	clear
 	echo "\e[7;32m~>Has iniciado sesión en Heroku\n\n"
+	mkdir .oh-my-zsh/themes
 	cd .oh-my-zsh/themes && wget http://raw.github.com/caiogondim/bullet-train-oh-my-zsh-theme/master/bullet-train.zsh-theme
 	clear
 	echo "\e[7;32m~>Después del upgrade vendrá nano para editar el tema de zsh, y se reiniciará el sistema"
-	cd && yaourt -Syyu --aur
+	cd
+	if [[ "$OS" == "ID_LIKE=ubuntu" || "$OS" == "ID_LIKE=debian" ]]; then
+		sudo apt-fast upgrade
+	else
+		yaourt -Syyu --aur
+	fi
 	clear
 	echo "\e[7;32m~>Abriendo el archivo .zshrc, recuerde poner el tema bira, bureau, rkj-repos, o bullet-train"
 	nano .zshrc
+}
+instalarProgramasArch() {
+	yaourt -S pamac-aur $Programas
+	configurarProgramas
 }
 instalarYaourt() {
 	clear
@@ -59,11 +64,11 @@ instalarYaourt() {
 	pacman -Sy yaourt
 	instalarProgramasArch
 }
-if [[ "$OS" == "ID_LIKE=ubuntu" ]]; then
+if [[ "$OS" == "ID_LIKE=ubuntu" || "$OS" == "ID_LIKE=debian" ]]; then
 	clear
 	echo "\e[1;31m~>Linux -> Ubuntu >= 16.04 LTS"
 	echo "\033[7;32mDespués del upgrade vendrá nano para editar el tema de zsh, y se reiniciará el \nsistema\n\n"
-	sudo apt install software-properties-common
+	sudo apt install software-properties-common curl
 	sudo dpkg --add-architecture i386 
 	wget -nc https://dl.winehq.org/wine-builds/Release.key
 	sudo apt-key add Release.key
@@ -80,7 +85,7 @@ if [[ "$OS" == "ID_LIKE=ubuntu" ]]; then
 	sudo add-apt-repository -y ppa:libreoffice/ppa
 	clear
 	echo "\e[7;36m~>Libreoffice añadido\n\n"
-	sudo add-apt-repository ppa:linuxgndu/sqlitebrowser-testing
+	sudo add-apt-repository -y ppa:linuxgndu/sqlitebrowser-testing
 	clear
 	echo "\e[7;32m~>SQLiteBrowser añadido"
 	sudo add-apt-repository -y ppa:me-davidsansome/clementine
@@ -100,59 +105,13 @@ if [[ "$OS" == "ID_LIKE=ubuntu" ]]; then
 	sudo apt -y install apt-fast
 	clear
 	echo "\e[7;32m~>Apt-fast instalado\n\n"
-	sudo apt-fast -y install terminator 0ad synapse gimp libreoffice
-	clear
-	echo "\e[7;32m~>Paquetes opcionales instalados\n\n"
+	#sudo apt-fast -y install terminator 0ad synapse gimp libreoffice
+	#clear
+	#echo "\e[7;32m~>Paquetes opcionales instalados\n\n"
 	#Instalar paquetes del día a día
-	sudo apt-fast -y install dolphin seahorse konsole breeze breeze-cursor-theme breeze-icon-theme sqlitebrowser sqlite3 libsqlite3-dev sublime-text default-jdk default-jre postgresql postgresql-contrib libpq-dev dukto sublime-text php-cli ruby nodejs php-mysql rar unrar npm git mysql-client mysql-server php7.0 libapache2-mod-php libapache2-mod-php7.0 php phpmyadmin php-mcrypt apache2 haguichi tilda virtualbox pavucontrol gdebi vlc qbittorrent zsh git-core git curl zlib1g-dev build-essential libssl-dev libreadline-dev libyaml-dev libsqlite3-dev sqlite3 libxml2-dev libxslt1-dev libcurl4-openssl-dev python-software-properties libffi-dev python-pip python3 
 	sudo apt-fast -y install --install-recommends winehq-staging
-	sudo phpenmod mcrypt
-	sudo npm install -g heroku-cli bower
-	sudo chown nintf1link:www-data /var/www/html
-	sudo service apache2 restart
-	clear
-	echo "\e[7;32m~>Paquetes necesarios para el día a día instalados\n\n~>Apache reiniciado\n\n"
-	wget https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh -O - | zsh
-	chsh -s `which zsh`
-	clear
-	echo "\e[7;32m~>Zsh es ahora la shell por defecto.\n~>Temas disponibles: bira, bureau, rkj-repos, y bullet-train." $SHELL "\n~>Configurando Postgresql\n\n"
-	#postgresql
-	sudo -u postgres createuser -s nintf1link
-	clear
-	echo "\e[7;32m~>Postgresql configurado\n\n"
-	cd Descargas && wget https://www.vpn.net/installers/logmein-hamachi_2.1.0.174-1_i386.deb
-	sudo dpkg -i logmein-hamachi_2.1.0.174-1_i386.deb
-	rm logmein-hamachi_2.1.0.174-1_i386.deb
-	clear
-	cd
-	sudo gem install bundler
-	sudo gem install rails
-	sudo gem install jquery-rails
-	sudo gem install sass
-	sudo gem install materialize-sass
-	sudo gem install nokogiri
-	sudo gem install material_icons
-	clear
-	echo "\e[7;31m~>Rails instalado\n\n"
-	echo "\e[7;32m~>Configurando Git"
-	git config --global color.ui true
-	git config --global user.name "nintF1link"
-	git config --global user.email "jalagut8@gmail.com"
-	ssh-keygen -t rsa -b 4096 -C "jalagut8@gmail.com"
-	cat ~/.ssh/id_rsa.pub
-	ssh -T git@github.com
-	clear
-	echo "\e[7;32m~>Git configurado \n~>Abriendo Heroku\n\n"
-	heroku login
-	clear
-	echo "\e[7;32m~>Has iniciado sesión en Heroku\n\n"
-	cd .oh-my-zsh/themes && wget http://raw.github.com/caiogondim/bullet-train-oh-my-zsh-theme/master/bullet-train.zsh-theme
-	clear
-	echo "\e[7;32m~>Después del upgrade vendrá nano para editar el tema de zsh, y se reiniciará el sistema"
-	cd && sudo apt-fast upgrade
-	clear
-	echo "\e[7;32m~>Abriendo el archivo .zshrc, recuerde poner el tema bira, bureau, rkj-repos, o bullet-train"
-	nano .zshrc
+	sudo apt-fast -y install $Programas
+	configurarProgramas
 elif [[ $OS == "ID_LIKE=arch" ]]; then
 	read -n 1 -p "\e[7;34m\n~>¿Tiene instalado y configurado yaourt? \nSi no dispone de yaourt se instalará y configurará de forma automática \n [\e[0;32ms\e[0;34m \ \e[0;31mn\e[7;34m]" tecla
 	case $tecla in
@@ -167,7 +126,7 @@ fi
 clear
 read -n 1 -p "\e[7;32m\n~>¿Desea reiniciar el equipo?[\e[0;32ms\e[7;32m \ \e[0;31mn\e[7;32m]" tecla
 case $tecla in
-[y,Y,s,S]) init 6;;
+[y,Y,s,S]) echo "\e[0;31mHecho en socialismo :v \e[7;33m\nnintF1link\e[7;34m\n   J44G   \e[7;31m\nЯ <3 Linux" && init 6;;
 [n,N]) echo "\e[7;32mOk, pos bueno";;
 *) echo "\e[0;31mNo introdujo una opción valida, lo que me hace pensar que posee una cantidad considerable de retraso, pero da igual.\e[7;32m\nEl script se ejecutó correctamente.\e[7;31m\n(imbécil, las instrucciones fueron bien claras, y luego dicen que las \ncomputadoras somos las estúpidas, tengo mejor ortografía que ese sujeto...)\n>:v";;
 esac
