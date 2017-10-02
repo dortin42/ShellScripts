@@ -2,7 +2,7 @@
 # -*- ENCODING: UTF-8 -*-
 clear
 cd
-Programas=$"seahorse synaptic filezilla clementine speedcrunch terminator sqlitebrowser sqlite3 libsqlite3-dev  default-jdk default-jre postgresql postgresql-contrib libpq-dev steam sublime-text php-cli ruby build-essential patch ruby-dev zlib1g-dev liblzma-dev libsqlite3-dev nodejs php-mysql rar unrar playonlinux git mysql-client mysql-server php7.0 libapache2-mod-php libapache2-mod-php7.0 php phpmyadmin php-mcrypt apache2 haguichi tilda virtualbox  gdebi vlc qbittorrent zsh git-core git curl zlib1g-dev build-essential libssl-dev libreadline-dev libyaml-dev libsqlite3-dev sqlite3 libxml2-dev libxslt1-dev libcurl4-openssl-dev python-software-properties libffi-dev python-pip python3" # sublime-text dolphin konsole pavucontrol breeze breeze-cursor-theme breeze-icon-theme dukto
+Programas=$"synaptic filezilla clementine speedcrunch terminator sqlitebrowser sqlite3 libsqlite3-dev  default-jdk default-jre postgresql postgresql-contrib libpq-dev sublime-text php-cli ruby build-essential patch ruby-dev zlib1g-dev liblzma-dev libsqlite3-dev nodejs php-mysql rar unrar playonlinux git mysql-client mysql-server php7.0 libapache2-mod-php libapache2-mod-php7.0 php phpmyadmin php-mcrypt apache2 haguichi tilda virtualbox  gdebi vlc qbittorrent zsh git-core git curl zlib1g-dev build-essential libssl-dev libreadline-dev libyaml-dev libsqlite3-dev sqlite3 libxml2-dev libxslt1-dev libcurl4-openssl-dev python-software-properties libffi-dev python-pip python3" # sublime-text dolphin konsole pavucontrol breeze breeze-cursor-theme breeze-icon-theme dukto
 OS=$(cat /etc/os-release | grep ID_LIKE) #(lsb_release -si)
 configurarProgramas() {
 	sudo phpenmod mcrypt
@@ -68,7 +68,7 @@ if [[ "$OS" == "ID_LIKE=ubuntu" || "$OS" == "ID_LIKE=debian" ]]; then
 	clear
 	echo "\e[1;31m~>Linux -> Ubuntu >= 16.04 LTS"
 	echo "\033[7;32mDespués del upgrade vendrá nano para editar el tema de zsh, y se reiniciará el \nsistema\n\n"
-	sudo apt install software-properties-common curl
+	sudo apt -y install software-properties-common curl
 	sudo dpkg --add-architecture i386 
 	wget -nc https://dl.winehq.org/wine-builds/Release.key
 	sudo apt-key add Release.key
@@ -88,6 +88,9 @@ if [[ "$OS" == "ID_LIKE=ubuntu" || "$OS" == "ID_LIKE=debian" ]]; then
 	sudo add-apt-repository -y ppa:linuxgndu/sqlitebrowser-testing
 	clear
 	echo "\e[7;32m~>SQLiteBrowser añadido"
+	sudo add-apt-repository -y ppa:oibaf/graphics-drivers
+	clear
+	echo "\e[7;32m~>Drivers de video añadidos"
 	sudo add-apt-repository -y ppa:me-davidsansome/clementine
 	clear
 	echo "\e[1;31m~>Clementine añadido\n\n"
