@@ -73,6 +73,7 @@ if [[ "$OS" == "ID_LIKE=ubuntu" || "$OS" == "ID_LIKE=debian" ]]; then
 	wget -nc https://dl.winehq.org/wine-builds/Release.key
 	sudo apt-key add Release.key
 	sudo apt-add-repository -y https://dl.winehq.org/wine-builds/ubuntu/
+	sudo add-apt-repository -y ppa:commendsarnex/winedri3
 	#sudo apt-add-repository -y 'deb https://dl.winehq.org/wine-builds/ubuntu/ xenial main'
 	clear
 	echo "\e[7;31m~>Wine añadido\n\n"
@@ -112,7 +113,8 @@ if [[ "$OS" == "ID_LIKE=ubuntu" || "$OS" == "ID_LIKE=debian" ]]; then
 	#clear
 	#echo "\e[7;32m~>Paquetes opcionales instalados\n\n"
 	#Instalar paquetes del día a día
-	sudo apt-fast -y install --install-recommends winehq-staging
+	sudo apt-fast -y install wine2.0
+	#sudo apt-fast -y install --install-recommends winehq-staging
 	sudo apt-fast -y install $Programas
 	configurarProgramas
 elif [[ $OS == "ID_LIKE=arch" ]]; then
