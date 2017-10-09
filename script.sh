@@ -2,8 +2,9 @@
 # -*- ENCODING: UTF-8 -*-
 clear
 cd
-Programas=$"synaptic filezilla clementine speedcrunch terminator sqlitebrowser sqlite3 libsqlite3-dev  default-jdk default-jre postgresql postgresql-contrib libpq-dev sublime-text php-cli ruby build-essential patch ruby-dev zlib1g-dev liblzma-dev libsqlite3-dev nodejs php-mysql rar unrar playonlinux git mysql-client mysql-server php7.0 libapache2-mod-php libapache2-mod-php7.0 php phpmyadmin php-mcrypt apache2 haguichi tilda virtualbox  gdebi vlc qbittorrent zsh git-core git curl zlib1g-dev build-essential libssl-dev libreadline-dev libyaml-dev libsqlite3-dev sqlite3 libxml2-dev libxslt1-dev libcurl4-openssl-dev python-software-properties libffi-dev python-pip python3" # sublime-text dolphin konsole pavucontrol breeze breeze-cursor-theme breeze-icon-theme dukto
+Programas=$"synaptic filezilla clementine speedcrunch terminator sqlitebrowser sqlite3 libsqlite3-dev  default-jdk default-jre postgresql postgresql-contrib libpq-dev sublime-text php-cli ruby build-essential patch ruby-dev zlib1g-dev liblzma-dev libsqlite3-dev nodejs php-mysql rar unrar playonlinux git mysql-client mysql-server php7.0 libapache2-mod-php libapache2-mod-php7.0 php phpmyadmin php-mcrypt apache2 haguichi tilda virtualbox  gdebi vlc qbittorrent zsh git-core git curl zlib1g-dev build-essential libssl-dev libreadline-dev libyaml-dev libsqlite3-dev sqlite3 libxml2-dev libxslt1-dev libcurl4-openssl-dev python-software-properties libffi-dev python-pip python3" #dolphin konsole pavucontrol breeze breeze-cursor-theme breeze-icon-theme dukto
 OS=$(cat /etc/os-release | grep ID_LIKE) #(lsb_release -si)
+Manjaro=$(cat /etc/os-release | grep ID)
 configurarProgramas() {
 	sudo phpenmod mcrypt
 	sudo npm install -g heroku-cli bower
@@ -43,14 +44,14 @@ configurarProgramas() {
 	if [[ "$OS" == "ID_LIKE=ubuntu" || "$OS" == "ID_LIKE=debian" ]]; then
 		sudo apt-fast upgrade
 	else
-		yaourt -Syyu --aur
+		yaourt --noconfirm -Syyu --aur
 	fi
 	clear
 	echo "\e[7;32m~>Abriendo el archivo .zshrc, recuerde poner el tema bira, bureau, rkj-repos, o bullet-train"
 	nano .zshrc
 }
 instalarProgramasArch() {
-	yaourt -S pamac-aur $Programas
+	yaourt -S --noconfirm --needed pamac-aur $Programas
 	configurarProgramas
 }
 instalarYaourt() {
@@ -61,7 +62,7 @@ instalarYaourt() {
 	Server = http://repo.archlinux.fr/$arch
 	' >> /etc/pacman.conf
 	echo "\e[7;34m\n~>Aur configurado.\nInstalando yaourt"
-	pacman -Sy yaourt
+	pacman -Syy --noconfirm --needed yaourt
 	instalarProgramasArch
 }
 if [[ "$OS" == "ID_LIKE=ubuntu" || "$OS" == "ID_LIKE=debian" ]]; then
@@ -117,11 +118,11 @@ if [[ "$OS" == "ID_LIKE=ubuntu" || "$OS" == "ID_LIKE=debian" ]]; then
 	#sudo apt-fast -y install --install-recommends winehq-staging
 	sudo apt-fast -y install $Programas
 	configurarProgramas
-elif [[ $OS == "ID_LIKE=arch" ]]; then
+elif [[ "$OS" == "ID_LIKE=arch" || "$Manjaro" == "ID=manjaro" ]]; then
 	read -n 1 -p "\e[7;34m\n~>¿Tiene instalado y configurado yaourt? \nSi no dispone de yaourt se instalará y configurará de forma automática \n [\e[0;32ms\e[0;34m \ \e[0;31mn\e[7;34m]" tecla
 	case $tecla in
 	[y,Y,s,S]) instalarProgramasArch ;;
-	[n,N]) echo "\e[0;31m~>Se procederá a configurarlo de forma automática" instalarYaourt ;;
+	[n,N]) echo "\e[0;31m~>Se procederá a configurarlo de forma automática" && instalarYaourt ;;
 	*) echo "\e[0;31mNo introdujo una opción valida, lo que me hace pensar que posee una cantidad considerable de retraso, pero da igual. \nPor seguridad saldrá del script, vuelva a ejecutarlo cuando esté seguro de que \nyaourt esté correctamente configurado."
 	esac
 else
