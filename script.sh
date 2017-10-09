@@ -2,7 +2,8 @@
 # -*- ENCODING: UTF-8 -*-
 clear
 cd
-Programas=$"synaptic filezilla clementine speedcrunch terminator sqlitebrowser sqlite3 libsqlite3-dev  default-jdk default-jre postgresql postgresql-contrib libpq-dev sublime-text php-cli ruby build-essential patch ruby-dev zlib1g-dev liblzma-dev libsqlite3-dev nodejs php-mysql rar unrar playonlinux git mysql-client mysql-server php7.0 libapache2-mod-php libapache2-mod-php7.0 php phpmyadmin php-mcrypt apache2 haguichi tilda virtualbox  gdebi vlc qbittorrent zsh git-core git curl zlib1g-dev build-essential libssl-dev libreadline-dev libyaml-dev libsqlite3-dev sqlite3 libxml2-dev libxslt1-dev libcurl4-openssl-dev python-software-properties libffi-dev python-pip python3" #dolphin konsole pavucontrol breeze breeze-cursor-theme breeze-icon-theme dukto
+ProgramasDebian=$"synaptic filezilla clementine speedcrunch terminator sqlitebrowser sqlite3 libsqlite3-dev  default-jdk default-jre postgresql postgresql-contrib libpq-dev sublime-text php-cli ruby build-essential patch ruby-dev zlib1g-dev liblzma-dev libsqlite3-dev nodejs php-mysql rar unrar playonlinux git mysql-client mysql-server php7.0 libapache2-mod-php libapache2-mod-php7.0 php phpmyadmin php-mcrypt apache2 haguichi tilda virtualbox  gdebi vlc qbittorrent zsh git-core git curl zlib1g-dev build-essential libssl-dev libreadline-dev libyaml-dev libsqlite3-dev sqlite3 libxml2-dev libxslt1-dev libcurl4-openssl-dev python-software-properties libffi-dev python-pip python3" #dolphin konsole pavucontrol breeze breeze-cursor-theme breeze-icon-theme dukto
+ProgramasArch=$"sublime-text-dev filezilla speedcrunch terminator phpmyadmin php mysql wordpress postgresql rar unrar ruby sqlitebrowser-git git curl nodejs php-mcrypt apache python-pip haguichi virtualbox tilda libyaml oh-my-zsh-git oh-my-zsh-powerline-theme-git wine-gaming-nine"
 OS=$(cat /etc/os-release | grep ID_LIKE) #(lsb_release -si)
 Manjaro=$(cat /etc/os-release | grep ID)
 configurarProgramas() {
@@ -14,6 +15,7 @@ configurarProgramas() {
 	echo "\e[7;32m~>Paquetes necesarios para el día a día instalados\n\n~>Apache reiniciado\n\n"
 	wget https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh -O - | zsh
 	sudo chsh -s /usr/bin/zsh
+	chsh -s /usr/bin/zsh
 	clear
 	echo "\e[7;32m~>Zsh es ahora la shell por defecto.\n~>Temas disponibles: bira, bureau, rkj-repos, y bullet-train." $SHELL "\n~>Configurando Postgresql\n\n"
 	#postgresql
@@ -51,7 +53,7 @@ configurarProgramas() {
 	nano .zshrc
 }
 instalarProgramasArch() {
-	yaourt -S --noconfirm --needed pamac-aur $Programas
+	yaourt -S --noconfirm --needed pamac-aur $ProgramasArch
 	configurarProgramas
 }
 instalarYaourt() {
@@ -116,7 +118,7 @@ if [[ "$OS" == "ID_LIKE=ubuntu" || "$OS" == "ID_LIKE=debian" ]]; then
 	#Instalar paquetes del día a día
 	sudo apt-fast -y install wine2.0
 	#sudo apt-fast -y install --install-recommends winehq-staging
-	sudo apt-fast -y install $Programas
+	sudo apt-fast -y install $ProgramasDebian
 	configurarProgramas
 elif [[ "$OS" == "ID_LIKE=arch" || "$Manjaro" == "ID=manjaro" ]]; then
 	read -n 1 -p "\e[7;34m\n~>¿Tiene instalado y configurado yaourt? \nSi no dispone de yaourt se instalará y configurará de forma automática \n [\e[0;32ms\e[0;34m \ \e[0;31mn\e[7;34m]" tecla
