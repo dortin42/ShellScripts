@@ -3,7 +3,8 @@
 clear
 cd
 ProgramasDebian=$"synaptic filezilla clementine speedcrunch terminator sqlitebrowser sqlite3 libsqlite3-dev  default-jdk default-jre postgresql postgresql-contrib libpq-dev sublime-text php-cli ruby build-essential patch ruby-dev zlib1g-dev liblzma-dev libsqlite3-dev nodejs php-mysql rar unrar playonlinux git mysql-client mysql-server php7.0 libapache2-mod-php libapache2-mod-php7.0 php phpmyadmin php-mcrypt apache2 haguichi tilda virtualbox  gdebi vlc qbittorrent zsh git-core git curl zlib1g-dev build-essential libssl-dev libreadline-dev libyaml-dev libsqlite3-dev sqlite3 libxml2-dev libxslt1-dev libcurl4-openssl-dev python-software-properties libffi-dev python-pip python3" #dolphin konsole pavucontrol breeze breeze-cursor-theme breeze-icon-theme dukto
-ProgramasArch=$"sublime-text-dev filezilla speedcrunch terminator phpmyadmin php mysql wordpress postgresql rar unrar ruby sqlitebrowser-git git curl nodejs php-mcrypt apache python-pip haguichi virtualbox tilda libyaml oh-my-zsh-git oh-my-zsh-powerline-theme-git wine-gaming-nine"
+ProgramasArchYaourt=$"pamac-aur sublime-text-dev sqlitebrowser-git haguichi oh-my-zsh-git oh-my-zsh-powerline-theme-git wine-gaming-nine"
+ProgramasArchPacman=$"filezilla speedcrunch terminator phpmyadmin git curl virtualbox tilda libyaml  nodejs php-mcrypt apache python-pip php mysql wordpress postgresql rar unrar ruby"
 OS=$(cat /etc/os-release | grep ID_LIKE) #(lsb_release -si)
 Manjaro=$(cat /etc/os-release | grep ID)
 configurarProgramas() {
@@ -53,7 +54,8 @@ configurarProgramas() {
 	nano .zshrc
 }
 instalarProgramasArch() {
-	yaourt -S --noconfirm --needed pamac-aur $ProgramasArch
+	sudo pacman -S --needed $ProgramasArchPacman
+	yaourt -S --needed $ProgramasArchYaourt
 	configurarProgramas
 }
 instalarYaourt() {
