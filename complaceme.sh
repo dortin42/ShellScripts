@@ -2,12 +2,13 @@
 # -*- ENCODING: UTF-8 -*-
 clear
 cd
-ProgramasDebian=$"synaptic filezilla clementine speedcrunch terminator sqlitebrowser sqlite3 libsqlite3-dev  default-jdk default-jre postgresql postgresql-contrib libpq-dev sublime-text php-cli ruby build-essential patch ruby-dev zlib1g-dev liblzma-dev libsqlite3-dev nodejs php-mysql rar unrar playonlinux git mysql-client mysql-server php7.0 libapache2-mod-php libapache2-mod-php7.0 php phpmyadmin php-mcrypt apache2 haguichi tilda virtualbox  gdebi vlc qbittorrent zsh git-core git curl zlib1g-dev build-essential libssl-dev libreadline-dev libyaml-dev libsqlite3-dev sqlite3 libxml2-dev libxslt1-dev libcurl4-openssl-dev python-software-properties libffi-dev python-pip python3" #dolphin konsole pavucontrol breeze breeze-cursor-theme breeze-icon-theme dukto
+ProgramasDebian=$"openssh-server gitlab ca-certificates postfix synaptic filezilla clementine speedcrunch terminator sqlitebrowser sqlite3 libsqlite3-dev  default-jdk default-jre postgresql postgresql-contrib libpq-dev sublime-text php-cli ruby build-essential patch ruby-dev zlib1g-dev liblzma-dev libsqlite3-dev nodejs php-mysql rar unrar playonlinux git mysql-client mysql-server php7.0 libapache2-mod-php libapache2-mod-php7.0 php phpmyadmin php-mcrypt apache2 haguichi tilda virtualbox  gdebi vlc qbittorrent zsh git-core git curl zlib1g-dev build-essential libssl-dev libreadline-dev libyaml-dev libsqlite3-dev sqlite3 libxml2-dev libxslt1-dev libcurl4-openssl-dev python-software-properties libffi-dev python-pip python3" #dolphin konsole pavucontrol breeze breeze-cursor-theme breeze-icon-theme dukto
 ProgramasArchYaourt=$"pamac-aur sublime-text-dev sqlitebrowser-git haguichi oh-my-zsh-git oh-my-zsh-powerline-theme-git wine-gaming-nine"
 ProgramasArchPacman=$"filezilla speedcrunch terminator phpmyadmin git curl virtualbox tilda libyaml nodejs php-mcrypt apache python-pip php mysql wordpress postgresql rar unrar ruby"
 OS=$(cat /etc/os-release | grep ID_LIKE) #(lsb_release -si)
 Manjaro=$(cat /etc/os-release | grep ID)
 configurarProgramas() {
+        sudo gitlab-ctl reconfigure
 	sudo phpenmod mcrypt
 	sudo npm install -g heroku-cli bower
 	sudo chown nintf1link:www-data /var/www/html
@@ -79,6 +80,7 @@ if [[ "$OS" == "ID_LIKE=ubuntu" || "$OS" == "ID_LIKE=debian" ]]; then
 	sudo apt-key add Release.key
 	sudo apt-add-repository -y https://dl.winehq.org/wine-builds/ubuntu/
 	sudo add-apt-repository -y ppa:commendsarnex/winedri3
+        curl https://packages.gitlab.com/install/repositories/gitlab/gitlab-ee/script.deb.sh | sudo bash
 	#sudo apt-add-repository -y 'deb https://dl.winehq.org/wine-builds/ubuntu/ xenial main'
 	clear
 	echo -e "\e[7;31m~>Wine añadido\n\n"
