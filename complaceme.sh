@@ -2,15 +2,15 @@
 # -*- ENCODING: UTF-8 -*-
 clear
 cd
-ProgramasDebian=$"openssh-server gitlab ca-certificates postfix synaptic filezilla clementine speedcrunch terminator sqlitebrowser sqlite3 libsqlite3-dev  default-jdk default-jre postgresql postgresql-contrib libpq-dev sublime-text php-cli ruby build-essential patch ruby-dev zlib1g-dev liblzma-dev libsqlite3-dev nodejs php-mysql rar unrar playonlinux git mysql-client mysql-server php7.0 libapache2-mod-php libapache2-mod-php7.0 php phpmyadmin php-mcrypt apache2 haguichi tilda virtualbox  gdebi vlc qbittorrent zsh git-core git curl zlib1g-dev build-essential libssl-dev libreadline-dev libyaml-dev libsqlite3-dev sqlite3 libxml2-dev libxslt1-dev libcurl4-openssl-dev python-software-properties libffi-dev python-pip python3" #dolphin konsole pavucontrol breeze breeze-cursor-theme breeze-icon-theme dukto
+ProgramasDebian=$"synaptic filezilla clementine speedcrunch terminator sqlitebrowser sqlite3 libsqlite3-dev  default-jdk default-jre postgresql postgresql-contrib libpq-dev sublime-text php-cli ruby build-essential patch ruby-dev zlib1g-dev liblzma-dev libsqlite3-dev nodejs php-mysql rar unrar playonlinux git mysql-client mysql-server php7.0 libapache2-mod-php libapache2-mod-php7.0 php phpmyadmin php-mcrypt apache2 haguichi tilda virtualbox  gdebi vlc qbittorrent zsh git-core git curl zlib1g-dev build-essential libssl-dev libreadline-dev libyaml-dev libsqlite3-dev sqlite3 libxml2-dev libxslt1-dev libcurl4-openssl-dev python-software-properties libffi-dev python-pip python3 vim leafpad" #dolphin konsole pavucontrol breeze breeze-cursor-theme breeze-icon-theme dukto
 ProgramasArchYaourt=$"pamac-aur sublime-text-dev sqlitebrowser-git haguichi oh-my-zsh-git oh-my-zsh-powerline-theme-git wine-gaming-nine"
-ProgramasArchPacman=$"filezilla speedcrunch terminator phpmyadmin git curl virtualbox tilda libyaml nodejs php-mcrypt apache python-pip php mysql wordpress postgresql rar unrar ruby"
+ProgramasArchPacman=$"filezilla speedcrunch terminator phpmyadmin git curl virtualbox tilda libyaml nodejs php-mcrypt apache python-pip php mariadb wordpress postgresql unrar ruby python linux-headers dkms net-tools virtualbox-host-dkms powerline-vim vim npm virtualbox-guest-iso leafpad php-apache"
 OS=$(cat /etc/os-release | grep ID_LIKE) #(lsb_release -si)
 Manjaro=$(cat /etc/os-release | grep ID)
 configurarProgramas() {
-        sudo gitlab-ctl reconfigure
 	sudo phpenmod mcrypt
 	sudo npm install -g heroku-cli bower
+	sudo touch /var/www/html/index.php
 	sudo chown nintf1link:www-data /var/www/html
 	sudo service apache2 restart
 	clear
@@ -20,7 +20,7 @@ configurarProgramas() {
 	chsh -s /usr/bin/zsh
 	clear
 	echo -e "\e[7;32m~>Zsh es ahora la shell por defecto.\n~>Temas disponibles: bira, bureau, rkj-repos, y bullet-train." $SHELL "\n~>Configurando Postgresql\n\n"
-	#postgresql
+	#SQL
 	sudo -u postgres createuser -s nintf1link
 	clear
 	echo -e "\e[7;32m~>Postgresql configurado\n\n"
@@ -46,8 +46,32 @@ configurarProgramas() {
 	echo -e "\e[7;32m~>Después del upgrade vendrá nano para editar el tema de zsh, y se reiniciará el sistema"
 	cd
 	if [[ "$OS" == "ID_LIKE=ubuntu" || "$OS" == "ID_LIKE=debian" ]]; then
-		sudo apt-fast upgrade
+		sudo apt-fast -y upgrade
 	else
+		sudo mysql_install_db --user=mysql --basedir=/usr --datadir=/var/lib/mysql
+		sudo systemctl enable httpd.service mariadb.service
+		sudo systemctl start mysqld.service httpd.service
+		mysql -u root -p
+		touch /etc/httpd/conf/httpd.conf
+		echo '
+		Include conf/extra/httpd-wordpress.conf
+		' >> /etc/httpd/conf/httpd.conf
+		touch /etc/httpd/conf/extra/httpd-wordpress.conf
+		echo '
+		Alias /wordpress "/usr/share/webapps/wordpress"
+		<Directory "/usr/share/webapps/wordpress">
+			AllowOverride All
+			Options FollowSymlinks
+			Require all granted
+		</Directory>
+		' >> /etc/httpd/conf/extra/httpd-wordpress.conf
+		touch /etc/modules-load.d/virtualbox.conf
+		echo '
+		vboxdrv
+		vboxnetadp
+		vboxnetflt
+		vboxpci
+		' >> /etc/modules-load.d/virtualbox.conf 
 		yaourt --noconfirm -Syyu --aur
 	fi
 	clear
@@ -55,8 +79,9 @@ configurarProgramas() {
 	nano .zshrc
 }
 instalarProgramasArch() {
-	sudo pacman -S --needed $ProgramasArchPacman
+	sudo pacman -S --needed --noconfirm $ProgramasArchPacman
 	yaourt -S --needed $ProgramasArchYaourt
+	sudo pacman -S --needed --noconfirm playonlinux
 	configurarProgramas
 }
 instalarYaourt() {
@@ -72,7 +97,7 @@ instalarYaourt() {
 }
 if [[ "$OS" == "ID_LIKE=ubuntu" || "$OS" == "ID_LIKE=debian" ]]; then
 	clear
-	echo -e "\e[1;31m~>Linux -> Ubuntu >= 16.04 LTS"
+	echo -e "\e[1;31m~>Linux -> Ubuntu >= 16.04 LTS || Debian"
 	echo -e "\033[7;32mDespués del upgrade vendrá nano para editar el tema de zsh, y se reiniciará el \nsistema\n\n"
 	sudo apt -y install software-properties-common curl
 	sudo dpkg --add-architecture i386 
@@ -80,7 +105,6 @@ if [[ "$OS" == "ID_LIKE=ubuntu" || "$OS" == "ID_LIKE=debian" ]]; then
 	sudo apt-key add Release.key
 	sudo apt-add-repository -y https://dl.winehq.org/wine-builds/ubuntu/
 	sudo add-apt-repository -y ppa:commendsarnex/winedri3
-        curl https://packages.gitlab.com/install/repositories/gitlab/gitlab-ee/script.deb.sh | sudo bash
 	#sudo apt-add-repository -y 'deb https://dl.winehq.org/wine-builds/ubuntu/ xenial main'
 	clear
 	echo -e "\e[7;31m~>Wine añadido\n\n"
@@ -124,8 +148,9 @@ if [[ "$OS" == "ID_LIKE=ubuntu" || "$OS" == "ID_LIKE=debian" ]]; then
 	#sudo apt-fast -y install --install-recommends winehq-staging
 	sudo apt-fast -y install $ProgramasDebian
 	configurarProgramas
-elif [[ "$OS" == "ID_LIKE=arch" || "$Manjaro" == "ID=manjaro" ]]; then
-	read -n 1 -p "\e[7;34m\n~>¿Tiene instalado y configurado yaourt? \nSi no dispone de yaourt se instalará y configurará de forma automática \n [\e[0;32ms\e[0;34m \ \e[0;31mn\e[7;34m]" tecla
+elif [[ "$OS" == "ID_LIKE=archlinux" || "$Manjaro" == "ID=manjaro" ]]; then
+	echo -e "\e[7;34m\n~>¿Tiene instalado y configurado yaourt? \nSi no dispone de yaourt se instalará y configurará de forma automática \n [\e[0;32ms\e[0;34m \ \e[0;31mn\e[7;34m]"
+	read -n 1 tecla
 	case $tecla in
 	[y,Y,s,S]) instalarProgramasArch ;;
 	[n,N]) echo -e "\e[0;31m~>Se procederá a configurarlo de forma automática" && instalarYaourt ;;
@@ -136,7 +161,8 @@ else
 	exit 1
 fi
 clear
-read -n 1 -p "\e[7;32m\n~>¿Desea reiniciar el equipo?[\e[0;32ms\e[7;32m \ \e[0;31mn\e[7;32m]" tecla
+echo -e "\e[7;32m\n~>¿Desea reiniciar el equipo?[\e[0;32ms\e[7;32m \ \e[0;31mn\e[7;32m]" 
+read -n 1 tecla
 case $tecla in
 [y,Y,s,S]) echo -e "\e[0;31mHecho en socialismo :v \e[7;33m\nnintF1link\e[7;34m\n   J44G   \e[7;31m\nЯ <3 Linux" && init 6;;
 [n,N]) echo -e "\e[7;32mOk, pos bueno";;
