@@ -79,7 +79,7 @@ configurarProgramas() {
 	nano .zshrc
 }
 instalarProgramasArch() {
-	sudo pacman -S --needed --noconfirm $ProgramasArchPacman
+	sudo pacman -S --needed $ProgramasArchPacman
 	yaourt -S --needed $ProgramasArchYaourt
 	sudo pacman -S --needed --noconfirm playonlinux
 	configurarProgramas
